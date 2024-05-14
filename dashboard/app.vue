@@ -1,8 +1,8 @@
 <template>
-  <NuxtLayout>
-    <div>
-      <NuxtLoadingIndicator color="var(--primary)" />
-      <NuxtPage />
-    </div>
-  </NuxtLayout>
+  <v-app>
+    <NuxtLayout>
+        <!-- <NuxtLoadingIndicator color="var(--primary)" /> -->
+        <NuxtPage />
+    </NuxtLayout>
+  </v-app>
 </template>

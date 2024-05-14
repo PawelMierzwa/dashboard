@@ -1,21 +1,32 @@
 <template>
     <div class="container">
-        <nav>
-            <header>
-                <h1>Dashboard</h1>
-            </header>
-            <router-link to="/dashboard/a">A</router-link>
-            <router-link to="/dashboard/b">B</router-link>
-            <router-link to="/dashboard/c">C</router-link>
-            <router-link to="/dashboard/d">D</router-link>
-            <router-view></router-view>
-        </nav>
+        <v-app-bar>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-toolbar-title>My App</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn text to="/">Home</v-btn>
+            <v-btn text to="/about">About</v-btn>
+        </v-app-bar>
+        <v-navigation-drawer v-model="drawer">
+            <v-list>
+                <v-list-item to="/">Home</v-list-item>
+                <v-list-item to="/about">About</v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+        <v-main>
+            <slot />
+        </v-main>
     </div>
 </template>
 
 <script>
 export default {
     name: 'DefaultLayout',
+    data() {
+        return {
+            drawer: false
+        }
+    }
 }
 </script>
 
