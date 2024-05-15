@@ -25,4 +25,20 @@ export default defineNuxtConfig({
       },
     },
   },
+  pinia: {
+    storesDirs: ['./stores/**', './custom-folder/stores/**'],
+  },
+  nitro: {
+    experimental: {
+      database: true,
+    },
+    database: {
+      default: {
+        connector: 'sqlite',
+        options: {
+          name: 'db',
+        }
+      },
+    }
+  }
 })
