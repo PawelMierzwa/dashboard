@@ -12,7 +12,11 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@pinia/nuxt": "^0.5.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
+    "bcrypt": "^5.1.1",
     "better-sqlite3": "^9.6.0",
+    "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
     "vite-plugin-vuetify": "^2.0.3",
