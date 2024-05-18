@@ -4,8 +4,11 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>My App</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn text to="/">Home</v-btn>
-            <v-btn text to="/about">About</v-btn>
+            <div v-if="isAuthenticated">
+                <v-btn text to="/">Home</v-btn>
+                <v-btn text to="/about">About</v-btn>
+            </div>
+            <v-btn text v-else to="/login">Login</v-btn>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer">
             <v-list>
@@ -22,11 +25,22 @@
 <script>
 export default {
     name: 'DefaultLayout',
+    setup() {
+        const store = useUserStore();
+        const isAuthenticated = computed(() => store.isAuthenticated);
+        if (process.client) {
+            useAsyncData('user', async () => {
+                const user = await store.fetchUser()
+                return user
+            })
+        }
+        return { isAuthenticated };
+    },
     data() {
         return {
             drawer: false
         }
-    }
+    },
 }
 </script>
 
