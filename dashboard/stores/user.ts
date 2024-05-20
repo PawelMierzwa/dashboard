@@ -17,12 +17,15 @@ export const useUserStore = defineStore({
             this.user = user;
         },
         async fetchUser() {
-            const res = await fetch('/api/user').then((res) => res.json());
-            if (res.body.message === 'Unauthorized') {
+            const res = await $fetch('/api/user');
+            if (res.status !== 200) {
+                console.log(res);
                 this.setUser(null as any);
                 return;
             }
-            this.setUser(res.body as User);
+            // if status is 200, we have a user
+            // @ts-ignore
+            this.setUser(res.user as User);
         },
         async login(username: string, password: string) {
             const res = await $fetch('/api/user/login', {

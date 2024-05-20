@@ -5,41 +5,38 @@ export default defineEventHandler(async (event) => {
     if (!token) {
         return {
             status: 401,
-            body: {
-                message: 'Unauthorized',
-            },
+            message: 'Unauthorized',
         };
     }
-    let userId: string | undefined;
+    let username: string | undefined;
     const { jwtSecret, jwtAlg } = useRuntimeConfig(event);
     jwt.verify(token, jwtSecret as jwt.Secret, { algorithms: [jwtAlg as jwt.Algorithm] }, function (err, decoded) {
         if (err) {
             console.log("User get error:", err);
             return {
                 status: 401,
-                body: {
-                    message: 'Unauthorized'
-                },
+                message: 'Unauthorized'
             };
         }
-        userId = (decoded as jwt.JwtPayload).userId as string;
+        username = (decoded as jwt.JwtPayload).username as string;
     });
-    if (!userId) {
+    if (!username) {
         return {
             status: 401,
-            body: { message: 'Unauthorized' },
+            message: 'Unauthorized',
         };
     }
     const db = useDatabase();
-    const user = (await db.sql`SELECT * FROM users WHERE id = ${userId}`).rows?.[0];
+    const user = (await db.sql`SELECT * FROM users WHERE username = ${username}`).rows?.[0];
     if (!user) {
         return {
             status: 401,
-            body: { message: 'Unauthorized' },
+            message: 'Unauthorized',
         };
     }
     return {
         status: 200,
-        body: user,
+        message: 'Authorized',
+        user: user,
     };
 });
