@@ -11,9 +11,10 @@ export default defineEventHandler(async (event) => {
         };
     }
     let userId: string | undefined;
-    jwt.verify(token, process.env.JWT_SECRET as jwt.Secret, { algorithms: [process.env.JWT_ALG as jwt.Algorithm] }, function (err, decoded) {
+    const { jwtSecret, jwtAlg } = useRuntimeConfig(event);
+    jwt.verify(token, jwtSecret as jwt.Secret, { algorithms: [jwtAlg as jwt.Algorithm] }, function (err, decoded) {
         if (err) {
-            console.log(err);
+            console.log("User get error:", err);
             return {
                 status: 401,
                 body: {

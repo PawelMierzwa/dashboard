@@ -6,6 +6,10 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  runtimeConfig: {
+    jwtSecret: '',
+    jwtAlg: ''
+  },
   modules: [
     ['@pinia/nuxt',
       {
