@@ -24,5 +24,20 @@ export const useUserStore = defineStore({
             }
             this.setUser(res.body as User);
         },
+        async login(username: string, password: string) {
+            const res = await $fetch('/api/user/login', {
+                method: 'POST',
+                body: JSON.stringify({ username, password }),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.status !== 200) {
+                return { error: res.message };
+            }
+            // @ts-ignore
+            this.setUser(res.user as User);
+            return true;
+        },
     },
 });
