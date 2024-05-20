@@ -8,6 +8,7 @@
                 <v-btn text to="/">Home</v-btn>
                 <v-btn text to="/about">About</v-btn>
             </div>
+            <v-btn text v-if="isAuthenticated" @click="logout">Logout</v-btn>
             <v-btn text v-else to="/login">Login</v-btn>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer">
@@ -27,6 +28,7 @@ export default {
     name: 'DefaultLayout',
     setup() {
         const store = useUserStore();
+        const router = useRouter();
         const isAuthenticated = computed(() => store.isAuthenticated);
         if (process.client) {
             useAsyncData('user', async () => {
@@ -34,7 +36,11 @@ export default {
                 return user
             })
         }
-        return { isAuthenticated };
+        const logout = async () => {
+            await store.logout();
+            router.push('/login');
+        }
+        return { isAuthenticated, logout };
     },
     data() {
         return {

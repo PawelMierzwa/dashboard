@@ -42,5 +42,13 @@ export const useUserStore = defineStore({
             this.setUser(res.user as User);
             return true;
         },
+        async logout() {
+            const res = await $fetch('/api/user/logout');
+            if (res.status !== 200) {
+                console.log(res);
+                return;
+            }
+            this.setUser(null as any);
+        },
     },
 });
