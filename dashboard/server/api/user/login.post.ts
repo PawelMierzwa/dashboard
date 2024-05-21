@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
