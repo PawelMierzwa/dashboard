@@ -10,6 +10,9 @@
                         autocomplete="current-password"></v-text-field>
                     <v-btn type="submit">Login</v-btn>
                     Don't have an account? <router-link to="/register">Register</router-link>
+                    <div id="alert-container">
+                        <v-alert v-if="message" type="error">{{ message }}</v-alert>
+                    </div>
                 </v-form>
             </v-card-text>
         </v-card>
@@ -27,13 +30,29 @@ if (isAuthenticated.value) {
 
 const username = ref('');
 const password = ref('');
+const message = ref('');
 
 const login = async () => {
+    if (!username.value || !password.value) {
+        message.value = 'Please fill in all fields';
+        return;
+    }
+
+    username.value = username.value.trim();
+    password.value = password.value.trim();
+
     const response = await store.login(username.value, password.value);
-    if (response === true) {;
+    if (response === true) {
+        ;
         router.push('/');
     } else {
         message.value = response.error;
     }
 }
 </script>
+
+<style scoped>
+#alert-container {
+    margin-top: 10px;
+}
+</style>
