@@ -10,7 +10,6 @@ export default defineEventHandler(async (event) => {
             message: 'Username and password are required',
         };
     }
-    const { jwtSecret, jwtAlg } = useRuntimeConfig(event);
     const db = useDatabase();
     const user = (await db.sql`SELECT * FROM users WHERE username = ${username}`).rows?.[0];
     if (!user) {
@@ -26,20 +25,14 @@ export default defineEventHandler(async (event) => {
             message: 'Invalid username or password',
         };
     }
-
-    const token = jwt.sign({
-        userId: user.id,
-        username: user.username
-    }, jwtSecret as jwt.Secret, { header: { alg: jwtAlg as jwt.Algorithm } });
-
-    setCookie(event, 'token', token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24 * 31,
-        path: '/',
-    });
-
+    // @ts-expect-error
+    const isTokenCreated = createToken(event, user.id, user.username);
+    if (!isTokenCreated) {
+        return {
+            status: 500,
+            message: 'Failed to create token',
+        };
+    }
     return {
         status: 200,
         message: 'Logged in',
