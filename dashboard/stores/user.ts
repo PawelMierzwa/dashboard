@@ -38,8 +38,27 @@ export const useUserStore = defineStore({
             if (res.status !== 200) {
                 return { error: res.message };
             }
+            // if status is 200, we have a user
             // @ts-ignore
             this.setUser(res.user as User);
+            return true;
+        },
+        async register(username: string, email: string, password: string) {
+            const res = await $fetch('/api/user/register', {
+                method: 'POST',
+                body: JSON.stringify({ username: username, email: email, password: password }),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.status !== 201) {
+                console.log(res);
+                return {
+                    error: res.message,
+                };
+            }
+            // @ts-expect-error
+            this.setUser(res.user);
             return true;
         },
         async logout() {
