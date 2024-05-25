@@ -1,6 +1,6 @@
 interface User {
     id: string;
-    name: string;
+    username: string;
     password?: string;
 }
 
@@ -13,6 +13,7 @@ export const useUserStore = defineStore({
     getters: {
         isAuthenticated: (state) => !!state.user,
         isLoaded: (state) => state.loaded,
+        getUser: (state) => state.user,
     },
     actions: {
         setUser(user: User) {

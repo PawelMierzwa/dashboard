@@ -1,14 +1,25 @@
 <template>
     <div class="container">
         <v-app-bar>
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title>My App</v-toolbar-title>
+            <v-app-bar-nav-icon id="nav-burger" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-toolbar-title><nuxt-link to="/">Dashboard App</nuxt-link></v-toolbar-title>
             <v-spacer></v-spacer>
             <div v-if="isAuthenticated">
                 <v-btn text to="/">Home</v-btn>
                 <v-btn text to="/about">About</v-btn>
             </div>
-            <v-btn text v-if="isAuthenticated" @click="logout">Logout</v-btn>
+            <v-menu v-if="isAuthenticated" :location="'bottom'" transition="slide-y-transition">
+                <template v-slot:activator="{ props }">
+                    <v-btn v-if="user" v-bind="props" style="margin-right: 10px;">
+                        {{  user.username }}
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item to="/profile" class="nav-dropdown-list-item">Profile</v-list-item>
+                    <v-list-item to="/settings" class="nav-dropdown-list-item">Settings</v-list-item>
+                    <v-list-item @click="logout" class="nav-dropdown-list-item">Logout</v-list-item>
+                </v-list>
+            </v-menu>
             <v-btn text v-else to="/login">Login</v-btn>
         </v-app-bar>
         <v-navigation-drawer v-model="drawer">
@@ -30,6 +41,8 @@ export default {
         const store = useUserStore();
         const router = useRouter();
         const isAuthenticated = computed(() => store.isAuthenticated);
+        const isLoaded = computed(() => store.isLoaded);
+        const user = computed(() => store.getUser);
         if (process.client) {
             useAsyncData('user', async () => {
                 const user = await store.fetchUser()
@@ -40,7 +53,7 @@ export default {
             await store.logout();
             router.push('/login');
         }
-        return { isAuthenticated, logout };
+        return { isAuthenticated, isLoaded, user, logout };
     },
     data() {
         return {
@@ -66,5 +79,23 @@ nav {
     color: white;
     padding: 10px;
     position: fixed;
+}
+
+.v-btn {
+    margin-right: 10px;
+}
+
+.nav-dropdown-list-item {
+    cursor: pointer;
+    text-align: center;
+}
+
+#nav-burger {
+    margin-left: 10px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
 }
 </style>
