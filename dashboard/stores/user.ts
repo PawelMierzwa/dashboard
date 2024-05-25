@@ -8,9 +8,11 @@ export const useUserStore = defineStore({
     id: 'user',
     state: () => ({
         user: null as User | null,
+        loaded: false,
     }),
     getters: {
         isAuthenticated: (state) => !!state.user,
+        isLoaded: (state) => state.loaded,
     },
     actions: {
         setUser(user: User) {
@@ -21,11 +23,14 @@ export const useUserStore = defineStore({
             if (res.status !== 200) {
                 console.log(res);
                 this.setUser(null as any);
+                this.loaded = true;
                 return;
             }
             // if status is 200, we have a user
             // @ts-ignore
             this.setUser(res.user as User);
+            this.loaded = true;
+            return;
         },
         async login(username: string, password: string) {
             const res = await $fetch('/api/user/login', {
