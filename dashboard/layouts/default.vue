@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <v-app-bar>
-            <v-app-bar-nav-icon id="nav-burger" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon v-if="isAuthenticated" id="nav-burger" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title><nuxt-link to="/">Dashboard App</nuxt-link></v-toolbar-title>
             <v-spacer></v-spacer>
             <div v-if="isAuthenticated">
@@ -22,14 +22,15 @@
             </v-menu>
             <v-btn text v-else to="/login">Login</v-btn>
         </v-app-bar>
-        <v-navigation-drawer v-model="drawer">
+        <v-navigation-drawer v-if="isAuthenticated" v-model="drawer">
             <v-list>
                 <v-list-item to="/">Home</v-list-item>
                 <v-list-item to="/about">About</v-list-item>
             </v-list>
         </v-navigation-drawer>
         <v-main>
-            <slot />
+            <div v-if="!isLoaded"><h1>Loading...</h1></div>
+            <slot v-else />
         </v-main>
     </div>
 </template>
