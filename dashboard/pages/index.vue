@@ -1,7 +1,6 @@
 <template>
     <div>
        <h1>Hellow</h1>
-       <Grid />
     </div>
 </template>
 
